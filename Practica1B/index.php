@@ -1,13 +1,32 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Práctica 1</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>Rellena tu CV</h1>
-    <form action="recogida.php" method="post" enctype="multipart/form-data">
+    <?php
+        if(isset($_POST["guardar"])){
+
+            echo"<p><strong>Nombre: </strong>".$_POST["Nombre"]."</p>";
+            echo"<p><strong>Apellidos: </strong>".$_POST["Apellidos"]."</p>";
+            echo"<p><strong>Contraseña: </strong>".$_POST["pass"]."</p>";
+            echo"<p><strong>DNI: </strong>".$_POST["dni"]."</p>";
+            echo"<p><strong>Sexo: </strong>".$_POST["sexo"]."</p>";
+            echo"<p><strong>Nacido en: </strong>".$_POST["nacido"]."</p>";
+            echo"<p><strong>Comentarios: </strong>";
+            if(isset($_POST["sb"])){
+                echo"Si";
+            }else{
+                echo"No";
+            }
+            echo"</p>";
+        }else
+        {
+            ?>
+            <h1>Rellena tu CV</h1>
+    <form action="index.php" method="get" enctype="multipart/form-data">
     <ul>
         <li>
             <label>Nombre</label>
@@ -81,5 +100,8 @@
         </li>
     </ul>
     </form> 
+        <?php>
+        }
+
 </body>
 </html>
