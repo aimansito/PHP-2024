@@ -13,6 +13,15 @@ if (isset($_POST["comprobar"])) {
 
     $error_form = $error_primeraPalabra || $error_primeraPalabraTama;
 }
+function quitar_espacios($texto){
+    $cadena ="";
+    for($i=0;$i<strelem($texto);$i++){
+        if($texto[$I]!=" "){
+            $cadena = $texto[$i];
+        }
+    }
+    return $cadena;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +35,7 @@ if (isset($_POST["comprobar"])) {
             border: 2px solid black;
         }
 
-        button {
+        .button {
             background-color: grey;
         }
 

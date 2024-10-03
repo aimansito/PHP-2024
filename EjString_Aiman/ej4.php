@@ -13,10 +13,10 @@ function letras_bien($texto){
     return $bien;
 }
 //funcion para comprobar si las letras estan en el orden correcto de mayor a menor valor
-function ordenMayorMenor($texto){
+function ordenCorrecto($texto){
     $bien = true;
     for($i=0;$i<strlen($texto)-1;$i++){
-        if(VALOR[$texto[i]]<VALOR[$texto[$i+1]]){//comparo el valor de la letra actual con la siguiente
+        if(VALOR[$texto[$i]]<VALOR[$texto[$i+1]]){//comparo el valor de la letra actual con la siguiente
             $bien = false;
             break;
         }
@@ -40,9 +40,9 @@ function repite($texto){
     return $bien;
 }
 //funcion que agrupa todas las validaciones anteriores para verificar si el número romano es correcto 
-function escorrecto($texto){
+function es_correcto_romano($texto){
     // devuelvo true si todas las condiciones se cumplen: las letras son validas, el orden es correcto y no hay repeticiones 
-    return letras_bien($texto) && orden_bueno($texto) && repite ($texto);
+    return letras_bien($texto) && ordenCorrecto($texto) && repite ($texto);
 }
 //verifico si el formulario ha sido enviado 
 if(isset($_POST["convertir"])){
