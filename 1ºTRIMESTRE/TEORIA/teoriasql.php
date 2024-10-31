@@ -83,6 +83,7 @@
     }
     echo "</table>";
 
+    //LAS NOTAS DE TODOS LOS ALUMNOS DE LA ASIGNATURA. 
 
     mysqli_close($conexion);
     echo "<h2>Cierro conexión</h2>";
