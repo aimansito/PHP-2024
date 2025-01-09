@@ -12,12 +12,12 @@ function error_page($title,$body){
     <head>
         <meta charset?="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>'.$title'</title>
+        <title>'.$title.'</title>
     </head>
     <body>
         '.$body.'
     </body> 
-    </html>'
+    </html>';
 }
 function repetido($conexion,$tabla,$valor,$columna_clave=null,$valor_clave=null){
     try{
@@ -41,7 +41,7 @@ function tiene_extension($texto){
     }else{
         $respuesta = end($array_nombre);
     }
-    return $respuesta
+    return $respuesta;
 }
 function LetraNIF($dni){
     return substr("TRWAGMYFPDXBNJZSQVHLCKEO", $dni % 23 , 1);
