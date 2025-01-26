@@ -19,7 +19,7 @@ function error_page($title,$body){
     </body> 
     </html>';
 }
-function repetido($conexion,$tabla,$valor,$columna_clave=null,$valor_clave=null){
+function repetido($conexion,$columna,$tabla,$valor,$columna_clave=null,$valor_clave=null){
     try{
         if(isset($columna_clave)){
             $columna = "select ".$columna."from ".$tabla." where ".$columna."='".$valor."' AND " .$columna_clave."<>'".$valor_clave."'";

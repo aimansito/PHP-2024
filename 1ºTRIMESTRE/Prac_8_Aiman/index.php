@@ -16,7 +16,7 @@ if(isset($_POST["btnContBorrar"])){
         if($_POST["Nombre_foto_bd"]!=NOMBRE_IMAGEN_DEFECTO_BD){
             unlink("img/".$_POST["nombre_foto_bd"]);
         }else{$_SESSION["mensaje_accion"]="Usuario borrado con exito";
-        headaer("Location:index.php");
+        header("Location:index.php");
         exit;
         }
     }
@@ -40,7 +40,7 @@ if(isset($_POST["btnDetalles"]) || isset($_POST["btnBorrar"])){
     }
     catch(Exception $e){
         mysqli_close($conexion);
-        session_destroy;
+        session_destroy();
         die(error_page("Práctica 8","<p>No se ha podido realizar la consulta: ".$e->getMessage()."</p>"));
     }
 }
@@ -67,7 +67,7 @@ if(isset($_POST["btnContAgregar"])){
         }
     }
 }
-$error_foto = $_FILES["foto"]["name"]!="" && ($_FILES["foto"]["error"] || !tiene_extension($_FILES["foto"]["name"] || !getimagessize($_FILES["foto"]["tmp_name"]) || $_FILES["foto"]["size"]>500*1024));
+$error_foto = $_FILES["foto"]["name"]!="" && ($_FILES["foto"]["error"] || !tiene_extension($_FILES["foto"]["name"] || !getimagesize($_FILES["foto"]["tmp_name"]) || $_FILES["foto"]["size"]>500*1024));
 $error_form_agregar=$error_nombre||$error_usuario||$error_clave||$error_dni||$error_foto;
 if(!$error_form_agregar){
     //inserto con imagen por defecto 
@@ -100,7 +100,63 @@ if(!$error_form_agregar){
 
             }
         }else{
-            $_SESSION["mensaje_accion"]="Usuario insertado con exito pero con la imagen por defecto"
+            $_SESSION["mensaje_accion"]="Usuario insertado con exito pero con la imagen por defecto";
         }
+        header("Location:index.php");
+        exit();
     }
 }
+// por ultimo hago la consulta para listar los usuarios de la tabla principal
+try{
+    $consulta="select * from usuarios";
+    $result_datos_usuarios=mysqli_query($conexion,$consulta);
+}catch(Exception $e){
+    mysqli_close($conexion);
+    session_destroy();
+    die(error_page("Práctica 8","<p>No se ha podido realizar la consulta: ".$e->getMessage()."</p>"));
+}
+
+mysqli_close($conexion);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica 8</title>
+    <style>
+        table, th, td{
+            border: 1px solid black;
+        }
+        table{
+            border-collapse: collapse;
+            width:90%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .mensaje{
+            font-size: 1.25rem;
+            color:blue;
+        }
+        .error{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Práctica 8</h1>
+    <?php
+    if(isset($_POST["btnDetalles"])){
+        require "vistas/vista_detalles.php";
+    }
+    if(isset($_POST["btnBorrar"])){
+        require  "vistas/vista_borrar.php";
+    }
+    if(isset($_POST["btnAgregar"]) || isset($_POST["btnConAgregar"]) && $error_form_agregar){
+        echo "<p class='mensaje'>!!" . $_SESSION["mensaje_accion"]."</p>";
+        session_destroy();
+    }
+    require "vistas/vista_tabla_principal.php";
+    ?>
+</body>
+</html>
