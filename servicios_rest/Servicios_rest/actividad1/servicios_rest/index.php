@@ -22,5 +22,27 @@
 
         echo json_encode(insertar_producto($datos));
     });
+
+    $app->put('/producto/actualizar/{codigo]', function($request){
+        $datos[]=$request->getParam("nombre");
+        $datos[]=$request->getParam("nombre_corto");
+        $datos[]=$request->getParam("descripcion");
+        $datos[]=$request->getParam("PVP");
+        $datos[]=$request->getParam("familia");
+        $datos[]=$request->getParam("codigo");
+    
+        echo json_encode(actualizar_producto($datos));
+    });
+
+    $app->delete('/producto/borrar/{codigo}', function($request){
+        $cod=$request->getAttribute("codigo");
+        echo json_encode(borrar_producto($cod));
+    });
+
+
+    $app->get('/familias',function(){
+        echo json_encode(obtener_familias());
+    });
+
     $app->run();
 ?>

@@ -78,4 +78,57 @@
         return $respuesta;
     }
 
+
+    function actualizar_producto($datos){
+        try{
+            $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        }catch(PDOException $e){
+            $respuesta["error"]="No se ha podido realizar la conexion: ".$e->getMessage();
+            return $respuesta;
+        }
+
+        try{
+            $consulta="update producto set nombre=?, nombre_corto=?, descripcion=?, PVP=?, familia=? where cod=?";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute($datos);
+        }catch(PDOException $e){
+            $sentencia=null;
+            $conexion=null;
+            $respuesta["error"]="No he podido realizarse la consulta: ".$e->getMessage();
+            return $respuesta;
+        }
+
+        $respuesta["mensaje"]="El producto con cod: ".end($datos)." se ha actualizado correctamente";
+
+        $sentencia=null;
+        $conexion=null;
+        return $respuesta;
+    }
+
+    function borrar_producto($cod){
+        try{
+            $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        }catch(PDOException $e){
+            $respuesta["error"]="No he podido conectarse a la base de datos".$e->getMessage();
+            return $respuesta;
+        }
+
+        try{
+            $consulta="delete froom producto where cod=?";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute([$cod]);
+        }catch(PDOException $e){
+            $sentencia=null;
+            $conexion=null;
+            $respuesta["error"]="No se ha podido realizar:  ".$e->getMessage();
+            return $respuesta;
+        }
+
+        $respuesta["mensaje"]="El producto con cod: ".$cod. " se ha borrado de la BD";
+
+        $sentencia=null;
+        $conexion=null;
+        return $respuesta; 
+    }
+
 ?>
