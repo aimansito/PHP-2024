@@ -33,11 +33,16 @@
 
         <label for="clave">Contraseña: </label></br>
         <input type="password" name="clave" id="clave"></br>
+        <?php
+            if(isset($_POST["btnEnviar"]) && $error_clave){
+                echo "<span class='error'>*Campo Vacío</span>";
+            }
+        ?>
         
         <label for="dni">DNI</label></br>
-        <input type="text" name="dni" size="10" id="dni"></br>
+        <input type="text" name="dni" size="10" id="dni" value="<?php if(isset($dni)) echo $dni?>"></br>
         <?php
-            if(isset($_POST["btnEnviar"])&& $error_dni){
+            if(isset($_POST["btnEnviar"]) && $error_dni){
                 if($dni == ""){
                     echo "<span class='error'>*Campo vacío</span>";
                 }else if(!dni_bien_escrito($dni)){
@@ -81,7 +86,7 @@
         ?>
         </br>
         <input type="submit" name="btnEnviar" value="Guardar Cambios">
-        <input type="reset" name="btnBorrar" value="Borrar los datos introducidos">
+        <input type="submit" name="btnBorrar" value="Borrar los datos introducidos">
     </form>
 </body>
 </html>
