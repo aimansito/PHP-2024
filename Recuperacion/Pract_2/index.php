@@ -1,25 +1,48 @@
 <?php
-    require "src/funciones_ctes.php";
 
-    if(isset($_POST["btnBorrar"])){
-        unset($_POST);
+session_name("Pract2_Rec_Jun_24_25");
+session_start();
+
+require "src/funciones_ctes.php";
+
+
+
+if(isset($_POST["btnCerrarSesion"]))
+{
+    session_destroy();
+    header("Location:index.php");
+    exit;
+}
+
+
+
+
+if(isset($_SESSION["usuario"]))
+{
+    //Estoy logueado
+
+    // Pongo vistas oportunas
+    require "src/seguridad.php";
+
+    if($datos_usu_log["tipo"]=="admin")
+    {
+        require "vistas/vista_admin.php";
     }
-
-    if(isset($_POST["btnEnviar"])){
-
-        $error_nombre=$_POST["nombre"]="";
-        $error_sexo=!isset($_POST["sexo"]);
-        $error_comentarios=$_POST["comentarios"]="";
-        $error_foto=$_FILES["foto"]["name"]!="" || $_FILES["foto"]["error"] || !tiene_extension($_FILES["foto"]["name"]) || $_FILES["foto"]["size"]>500*1024 || !getimagesize($_FILES["foto"]["tmp_name"]);
-
-
-        $errores_form=$error_nombre||$error_sexo||$error_comentarios||$error_foto;
+    else
+    {
+        require "vistas/vista_normal.php";
     }
+    
+    $conexion=null;
+}
+elseif(isset($_POST["btnRegistro"]) || isset($_POST["btnContRegistro"]) || isset($_POST["btnReset"]))
+{
+    //No estoy logueadeo
+    require "vistas/vista_registro.php";
+}
+else
+{
+    require "vistas/vista_home.php";
+}
 
-
-    if(isset($_POST["btnEnviar"]) && !$errores_form){
-        require "vistas/vistaDatos.php";
-    }else{
-        require "vistas/vistaForm.php";
-    }
 ?>
