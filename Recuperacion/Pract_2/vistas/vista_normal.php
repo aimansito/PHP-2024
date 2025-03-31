@@ -7,6 +7,7 @@
     <style>
         .enlinea{display:inline}
         .enlace{border:none;background:none;text-decoration: underline;color:blue;cursor: pointer;}
+        .mensaje{color:blue;font-size:1.25em}
     </style>
 </head>
 <body>
@@ -18,10 +19,11 @@
         </form>
     </div>
     <?php
-        if(isset($_SESSION["mensaje_registro"])){
-            echo "<p class='mensaje'>".$_SESSION["mensaje_registro"]."</p>";
-            unset($_SESSION["mensaje_registro"]);
-        }
+    if(isset($_SESSION["mensaje_registro"]))
+    {
+        echo "<p class='mensaje'>".$_SESSION["mensaje_registro"]."</p>";
+        unset($_SESSION["mensaje_registro"]);
+    }
     ?>
 </body>
 </html>

@@ -6,7 +6,7 @@ session_start();
 require "src/funciones_ctes.php";
 
 
-
+//Código para cerrar sesión una vez logueado desde las vista admin y normal
 if(isset($_POST["btnCerrarSesion"]))
 {
     session_destroy();
@@ -15,14 +15,12 @@ if(isset($_POST["btnCerrarSesion"]))
 }
 
 
-
-
 if(isset($_SESSION["usuario"]))
 {
     //Estoy logueado
 
     // Pongo vistas oportunas
-    require "src/seguridad.php";
+    require "src/seguridad.php";//Aquí se abre la conexión y se deja abierta
 
     if($datos_usu_log["tipo"]=="admin")
     {
