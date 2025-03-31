@@ -7,7 +7,6 @@
     if(isset($_POST["btnBorrar"])){
         //header("Location:index.php");
         //exit;
-
         unset($_POST);
     }
 

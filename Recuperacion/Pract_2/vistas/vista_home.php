@@ -64,7 +64,7 @@ if(isset($_POST["btnLogin"]))
 </head>
 <body>
     <h1>Práctica 2 - Rec</h1>
-    <form action="vista_normal.php" method="post">
+    <form action="index.php" method="post">
         <p>
             <label for="usuario">Usuario: </label>
             <input type="text" name="usuario" id="usuario" value="<?php if(isset($_POST["usuario"])) echo $_POST["usuario"];?>"/>
@@ -100,4 +100,4 @@ if(isset($_POST["btnLogin"]))
     }
     ?>
 </body>
-</html>
+</html>  
