@@ -2,6 +2,11 @@
 
 if(isset($_POST["btnDetalles"]))
 {
+    if(isset($_POST["btnDetalles"])){
+        $id_usuario = $_POST["btnDetalles"];
+    }else{
+        $id_usuario = $_POST["btnBorrar"];
+    }
     try{
         $consulta="select * from usuarios where id_usuario=?";
         $sentencia=$conexion->prepare($consulta);
