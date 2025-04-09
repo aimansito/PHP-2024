@@ -1,41 +1,34 @@
 <?php
-
-session_name("Pract2_Rec_Jun_24_25");
+session_name("Pract2_Rec_23_24");
 session_start();
 
 require "src/funciones_ctes.php";
 
-
-//Código para cerrar sesión una vez logueado desde las vista admin y normal
-if(isset($_POST["btnCerrarSesion"]))
+if(isset($_POST["btnSalir"]))
 {
     session_destroy();
     header("Location:index.php");
-    exit;
+    exit();
 }
 
 
 if(isset($_SESSION["usuario"]))
 {
-    //Estoy logueado
-
-    // Pongo vistas oportunas
-    require "src/seguridad.php";//Aquí se abre la conexión y se deja abierta
-
-    if($datos_usu_log["tipo"]=="admin")
-    {
-        require "vistas/vista_admin.php";
-    }
-    else
-    {
-        require "vistas/vista_normal.php";
-    }
     
+    require "src/seguridad.php";
+
+    if($datos_usuario_log["tipo"]=="normal")
+        
+        require "vistas/vista_normal.php";
+    else
+        require "vistas/vista_admin.php";
+
+ 
     $conexion=null;
 }
-elseif(isset($_POST["btnRegistro"]) || isset($_POST["btnContRegistro"]) || isset($_POST["btnReset"]))
+elseif(isset($_POST["btnRegistrarse"]) || isset($_POST["btnBorrar"]) || isset($_POST["btnEnviar"])  )
 {
-    //No estoy logueadeo
+
     require "vistas/vista_registro.php";
 }
 else

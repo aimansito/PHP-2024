@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Práctica 2 - Rec</title>
+    <title>Práctica Rec 2</title>
     <style>
-        .enlinea{display:inline}
-        .enlace{border:none;background:none;text-decoration: underline;color:blue;cursor: pointer;}
-        .mensaje{color:blue;font-size:1.25em}
+        .en_linea{display:inline}
+        .enlace{border:none;background:none;color:blue;text-decoration:underline;cursor:pointer}
+        .mensaje{font-size:1.25em;color:blue}
     </style>
 </head>
 <body>
-    <h1>Práctica 2 - Rec</h1>
+    <h1>Práctica Rec 2</h1>
     <div>
-        Bienvenido <strong><?php echo $datos_usu_log["usuario"];?></strong> - 
-        <form class="enlinea" method="post" action="index.php">
-            <button class="enlace" type="submit" name="btnCerrarSesion">Salir</button>
+        Bienvenido <strong><?php echo $datos_usuario_log["usuario"];?></strong> - 
+        <form class="en_linea" action="index.php" method="post">
+            <button class="enlace" name="btnSalir" type="submit">Salir</button>
         </form>
     </div>
     <?php
