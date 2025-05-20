@@ -7,9 +7,9 @@ require 'Firebase/autoload.php';
 define("PASSWORD_API","Una_clave_para_usar_para_encriptar");
 define("MINUTOS_API",60);
 define("SERVIDOR_BD","localhost");
-define("USUARIO_BD","root");
-define("CLAVE_BD",null);
-define("NOMBRE_BD","bd_guardias_exam");
+define("USUARIO_BD","jose");
+define("CLAVE_BD","josefa");
+define("NOMBRE_BD","bd_horarios_exam");
 
 
 function validateToken()
@@ -164,7 +164,7 @@ function obtener_usuarios_guardia($dia,$hora)
     }
 
     try{
-        $consulta="select usuarios.* from usuarios,horario_guardias where usuarios.id_usuario=horario_guardias.usuario and dia=? and hora=?";
+        $consulta="select usuarios.* from usuarios,horario_lectivo where usuarios.id_usuario=horario_guardias.usuario and dia=? and hora=?";
         $sentencia=$conexion->prepare($consulta);
         $sentencia->execute([$dia, $hora]);
 
@@ -197,7 +197,7 @@ function obtener_guardias_profesor($id_usuario)
     }
 
     try{
-        $consulta="select dia, hora from horario_guardias where usuario=?";
+        $consulta="select dia, hora from horario_lectivo where usuario=?";
         $sentencia=$conexion->prepare($consulta);
         $sentencia->execute([$id_usuario]);
 

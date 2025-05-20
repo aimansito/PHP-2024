@@ -1,5 +1,5 @@
 <?php
-define("DIR_SERV","http://localhost/Proyectos/Examen_Rec_SW_24_25/servicios_rest");
+define("DIR_SERV","http://localhost/PHP-2024/Recuperacion/Examenes/Examen_Rec_SW_24_25/Examen_Rec_SW_24_25/servicios_rest");
 define("MINUTOS",10);
 
 function consumir_servicios_REST($url,$metodo,$datos=null)
