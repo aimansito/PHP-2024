@@ -1,5 +1,5 @@
 <?php
-define("DIR_SERV","http://localhost/proyectos/Recuperacion/Examenes/Examen_Rec_SW_24_25_Aiman/Examen_Rec_SW_24_25/servicios_rest");
+define("DIR_SERV","http://localhost/Proyectos/Examen_Final_DWESE/API_REST");
 define("MINUTOS",10);
 
 function consumir_servicios_REST($url,$metodo,$datos=null)
@@ -29,6 +29,7 @@ function consumir_servicios_JWT_REST($url,$metodo,$headers,$datos=null)
     curl_close($llamada);
     return $respuesta;
 }
+
 function error_page($title, $body)
 {
    return '<!DOCTYPE html>
