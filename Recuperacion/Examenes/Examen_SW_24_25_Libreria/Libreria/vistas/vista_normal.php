@@ -14,6 +14,8 @@
     <div>
         Bienvenido <strong><?php echo $datos_usu_log["lector"];?></strong> - <form class="enlinea" action="index.php" method="post"><button class="enlace" type="submit" name="btnSalir">Salir</button></form>
     </div>
-
+    <?php
+        include ("vistas/vista_libros.php");
+    ?>
 </body>
 </html>

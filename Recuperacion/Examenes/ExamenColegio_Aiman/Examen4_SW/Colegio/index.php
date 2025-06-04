@@ -1,26 +1,23 @@
 <?php
-session_name("Examen_Final_DWESE_24_25");
+session_name("Examen4_SW_23_24");
 session_start();
+
 require "src/funciones_ctes.php";
 
 
-if(isset($_POST["btnSalir"]))
-{
+if (isset($_POST["btnSalir"])) {
     session_destroy();
     header("Location:index.php");
     exit;
 }
 
-if(isset($_SESSION["token"]))
-{
+if (isset($_SESSION["token"])) {
     require "src/seguridad.php";
-
-    if($datos_usu_log["tipo"]=="normal")
+    if ($datos_usu_log["tipo"] == "alumno")
         require "vistas/vista_normal.php";
-    else
+    else {
         require "vistas/vista_admin.php";
+    }
+} else {
+    require "vistas/vista_home.php";
 }
-else
-    require "vistas/vista_login.php";
-
-

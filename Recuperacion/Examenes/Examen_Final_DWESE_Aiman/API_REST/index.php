@@ -25,7 +25,7 @@
         if(is_array($test)){
             if(isset($test["usuario"])){
                 if($test["usuario"]["tipo"]=="admin"){
-                    echo json_encode(obtener_usuarios($request->getAttribute("id_usuario")));
+                    echo json_encode(obtener_usuario($request->getAttribute("id_usuario")));
                 }else{
                     echo json_encode(array("no-auth"=>"No tienes permiso para usar el servicio"));
                 }

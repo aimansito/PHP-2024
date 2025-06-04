@@ -10,12 +10,11 @@ define("MINUTOS_API", 60);
 define("SERVIDOR_BD", "localhost");
 define("USUARIO_BD", "jose");
 define("CLAVE_BD", "josefa");
-define("NOMBRE_BD", "bd_horarios_exam2");
+define("NOMBRE_BD", "bd_exam_colegio2");
 
 
 function validateToken()
 {
-
     $headers = apache_request_headers();
     if (!isset($headers["Authorization"]))
         return false; //Sin autorizacion
@@ -38,7 +37,7 @@ function validateToken()
         }
 
         try {
-            $consulta = "select * from usuarios where id_usuario=?";
+            $consulta = "select * from usuarios where cod_usu=?";
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute([$info->data]);
         } catch (PDOException $e) {
@@ -51,7 +50,7 @@ function validateToken()
             $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
 
             $payload['exp'] = time() + (MINUTOS_API * 60);
-            $payload['data'] = $respuesta["usuario"]["id_usuario"];
+            $payload['data'] = $respuesta["usuario"]["cod_usu"];
             $jwt = JWT::encode($payload, PASSWORD_API, 'HS256');
             $respuesta["token"] = $jwt;
         } else
@@ -79,26 +78,25 @@ function login($datos_login)
     } catch (PDOException $e) {
         $sentencia = null;
         $conexion = null;
-        $respuesta["error"] = "No se ha podido realizar la consulta: " . $e->getMessage();
+        $respuesta["error"] = "No he podido realizarse la consulta: " . $e->getMessage();
         return $respuesta;
     }
 
     if ($sentencia->rowCount() > 0) {
         $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
         $payload['exp'] = time() + (MINUTOS_API * 60);
-        $payload['data'] = $respuesta["usuario"]["id_usuario"];
-        $jwt = JWT::encode($payload, PASSWORD_API, 'H5256');
+        $payload['data'] = $respuesta["usuario"]["cod_usu"];
+        $jwt = JWT::encode($payload, PASSWORD_API, 'HS256');
         $respuesta["token"] = $jwt;
-    } else {
-        $respuesta["mensaje"] = "El usuario no se encuentra a la BD";
-    }
+    } else
+        $respuesta["mensaje"] = "El usuario no se encuentra en la BD";
 
     $sentencia = null;
     $conexion = null;
     return $respuesta;
 }
 
-function obtener_horario($id_usuario)
+function obtenerNotas($cod_usu)
 {
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
@@ -108,78 +106,26 @@ function obtener_horario($id_usuario)
     }
 
     try {
-        $consulta = "select horario_lectivo.dia, horario_lectivo.hora, grupos.nombre from horario_lectivo, grupos where horario_lectivo.grupo=grupos.id_grupo and horario horario_lectivo.usuario=?";
+        $consulta = "select asignaturas.cod_asig, 
+                            asignaturas.denominacion, 
+                            notas.nota 
+                        from usuarios
+                            join notas on usuarios.cod_usu=notas.cod_usu 
+                                join asignaturas on notas.cod_asig = asignaturas.cod_asig
+                                    and usuarios.cod_usu=?";
         $sentencia = $conexion->prepare($consulta);
-        $sentencia->execute([$id_usuario]);
+        $sentencia->execute([$cod_usu]);
     } catch (PDOException $e) {
         $sentencia = null;
         $conexion = null;
-        $respuesta["error"] = "No ha podido realizarse la consulta: " . $e->getMessage();
+        $respuesta["error"] = "No he podido realizarse la consulta: " . $e->getMessage();
         return $respuesta;
     }
 
-    $respuesta["horario"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+    $respuesta["notas"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
     $sentencia = null;
     $conexion = null;
     return $respuesta;
 }
-
-function usuarios_guardia($dia, $hora)
-{
-    try {
-        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-    } catch (PDOException $e) {
-        $respuesta["error"] = "No he podido conectarse a la base de batos: " . $e->getMessage();
-        return $respuesta;
-    }
-
-    try{
-        $consulta="select usuarios.* from usuarios, horario_lectivo, grupos where horario_lectivo.usuario=usuarios.id_usuario and horario_lectivo.grupo=grupos.id_grupo and dia=? and hora=? and grupos.nombre='GUARD'";
-        $sentencia=$conexion->prepare($consulta);
-        $sentencia->execute([$dia,$hora]);
-    }catch(PDOException $e){
-        $sentencia=null;
-        $conexion=null;
-        $respuesta["error"]="No se ha podido realizar la consulta: ".$e->getMessage();
-        return $respuesta;
-    }
-
-    $respuesta["usuarios"]=$sentencia->fetchAll(PDO::FETCH_ASSOC);
-    $sentencia=null;
-    $conexion=null;
-    return $respuesta;
-}
-
-function obtener_usuario($id_usuario){
-    try{
-        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-    }
-    catch(PDOException $e)
-    {
-        $respuesta["error"]="No he podido conectarse a la base de batos: ".$e->getMessage();
-        return $respuesta;
-    }
-
-    try{
-        $consulta="select * from usuarios where id_usuario=?";
-        $sentencia=$conexion->prepare($consulta);
-        $sentencia->execute([$id_usuario]);
-    }catch(PDOException $e){
-        $sentencia=null;
-        $conexion=null;
-        $respuesta["error"]="No se ha podido realizar la consulta".$e->getMessage();
-        return $respuesta;
-    }
-
-    if($sentencia->rowCount()>0){
-        $respuesta["usuario"]=$sentencia->fetch(PDO::FETCH_ASSOC);
-    }else{
-        $respuesta["mensaje"]="El usuario con (".$id_usuario.") no se encuentra en la BD";
-    }
-
-    $sentencia=null;
-    $conexion=null;
-    return $respuesta;
-}
-
-?>

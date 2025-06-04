@@ -1,11 +1,9 @@
 <?php
-define("DIR_SERV","http://localhost/PHP-2024/Recuperacion/Examenes/Examen_Final_DWESE/API_REST");
-define("MINUTOS",10);
-const DIAS=array(1=>"Lunes","Martes","Miércoles","Jueves","Viernes");
-const HORAS=array(1=>"8:15-9:15","9:15-10:15","10:15-11:15","11:15-11:45","11:45-12:45","12:45-13:45","13:45-14:45");
+define("DIR_SERV","http://localhost/PHP-2024/Recuperacion/Examenes/ExamenColegio_Tomas/Examen4_SW/servicios_rest/");
+define("MINUTOS",15);
 
-function consumir_servicios_REST($url,$metodo,$datos=null)
-{
+
+function consumir_servicios_REST($url,$metodo,$datos=null){
     $llamada=curl_init();
     curl_setopt($llamada,CURLOPT_URL,$url);
     curl_setopt($llamada,CURLOPT_RETURNTRANSFER,true);
@@ -18,8 +16,7 @@ function consumir_servicios_REST($url,$metodo,$datos=null)
 }
 
 
-function consumir_servicios_JWT_REST($url,$metodo,$headers,$datos=null)
-{
+function consumir_servicios_JWT_REST($url,$metodo,$headers,$datos=null){
     $llamada=curl_init();
     curl_setopt($llamada,CURLOPT_URL,$url);
     curl_setopt($llamada,CURLOPT_RETURNTRANSFER,true);
@@ -31,6 +28,7 @@ function consumir_servicios_JWT_REST($url,$metodo,$headers,$datos=null)
     curl_close($llamada);
     return $respuesta;
 }
+
 
 function error_page($title, $body)
 {
@@ -44,5 +42,6 @@ function error_page($title, $body)
    <body>'.$body.'</body>
    </html>';
 }
+
 
 ?>

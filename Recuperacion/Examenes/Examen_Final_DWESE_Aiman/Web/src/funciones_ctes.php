@@ -1,5 +1,5 @@
 <?php
-define("DIR_SERV","http://localhost/Proyectos/Examen_Final_DWESE/API_REST");
+define("DIR_SERV","http://localhost/PHP-2024/Recuperacion/Examenes/Examen_Final_DWESE/API_REST");
 define("MINUTOS",10);
 const DIAS=array(1=>"Lunes","Martes","Miércoles","Jueves","Viernes");
 const HORAS=array(1=>"8:15-9:15","9:15-10:15","10:15-11:15","11:15-11:45","11:45-12:45","12:45-13:45","13:45-14:45");
