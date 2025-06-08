@@ -74,7 +74,7 @@ function login($datos_login)
 
     try {
         $consulta = "select * from usuarios where lector=? and clave=?";
-        $sentencia = $conexion->prepare($consulta);
+        $sentencia = $conexion->prepare($consulta);  
         $sentencia->execute($datos_login);
     } catch (PDOException $e) {
         $sentencia = null;
@@ -174,6 +174,12 @@ function crear_libro($datos){
         $conexion=null;
         $respuesta["error"]="No se ha podido realizar la consulta: ".$e->getMessage();
         return $respuesta;
+    }
+
+    if($sentencia->rowCount()==1){
+        $respuesta['mensaje']="Libro insertado correctamente";
+    }else{
+        $respuesta['error']="No se insertó el libro";
     }
 
     $respuesta['mensaje']="Libro insertado correctamente en la BD";
