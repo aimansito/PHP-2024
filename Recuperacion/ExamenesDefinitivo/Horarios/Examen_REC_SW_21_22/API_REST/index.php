@@ -66,8 +66,28 @@ $app->get('/obtenerGrupos', function() {
 
 
 $app->get('/obtenerHorario/{id_grupo}', function($request){
-   $id_grupo = $request->getAttribute("id_grupo");
-   echo json_encode(obtener_horario_grupo($id_grupo));
+
+    $test = validateToken();
+    if (is_array($test)) {
+        if (isset($test["usuario"])) {
+            if ($test["usuario"]["tipo"] == "admin") {
+
+                // Obtener el id_grupo desde la ruta
+                $id_grupo = $request->getAttribute("id_grupo");
+                $datos = ["id_grupo" => $id_grupo];
+
+                echo json_encode(obtener_horario_grupo($datos));
+
+            } else {
+                echo json_encode(["no-auth" => "No tienes permiso para usar este servicio"]);
+            }
+        } else {
+            echo json_encode($test); // Error de token (caducado o inválido)
+        }
+    } else {
+        echo json_encode(["no-auth" => "No tienes permiso para usar este servicio"]);
+    }
+
 });
 
 $app->get('/profesoresLibres/{dia}/{hora}/{grupo}', function($request){

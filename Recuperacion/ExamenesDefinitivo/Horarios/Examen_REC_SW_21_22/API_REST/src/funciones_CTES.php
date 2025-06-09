@@ -153,7 +153,7 @@
 
         return $respuesta;
     }
-    function obtener_horario_grupo($datos)
+    function obtener_horario_grupo($id_grupo)
     {
         try {
             $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
@@ -165,15 +165,18 @@
         try {
             $consulta = "SELECT horario_lectivo.dia, horario_lectivo.hora, usuarios.nombre as profe, aulas.nombre as aula FROM horario_lectivo, usuarios, aulas WHERE horario_lectivo.usuario=usuarios.id_usuario and horario_lectivo.aula=aulas.id_aulas and horario_lectivo.grupo=?";
             $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute([$datos]);
+            $sentencia->execute([$id_grupo["id_grupo"]]);
+
+                if($sentencia->rowCount() > 0){
+                    $respuesta["horario_grupo"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    $respuesta["horario_grupo"] = []; // Array vacío si no hay resultados
+                }
         } catch (PDOException $e) {
             $sentencia = null;
             $conexion = null;
             $respuesta["error"] = "No se ha podido realizar la consulta: " . $e->getMessage();
-        }
-
-        if($sentencia->rowCount()>0){
-            $respuesta["horario_grupo"]=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+            return $respuesta;
         }
 
         $sentencia=null;

@@ -1,47 +1,50 @@
 <?php
+$headers[] = "Authorization: Bearer " . $_SESSION["token"];
+$url = DIR_SERV . "/obtenerGrupos";
+$respuesta = consumir_servicios_JWT_REST($url, "GET", $headers);
+$json_grupos = json_decode($respuesta, true);
+if (!$json_grupos) {
+    session_destroy();
+    die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>Error usando el servicio" . $url . "</p>"));
+}
+if (isset($json_grupos["error"])) {
+    session_destroy();
+    die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>" . $json_grupos["error"] . "</p>"));
+}
+
+$nombre = "";
+$id_grupo = "";
+if ((isset($_POST["btnHorario"])) || (isset($_POST["btnEditar"]))) {
+
+    if (isset($_POST["btnHorario"])) {
+        $datos_select = explode("-", $_POST["grupos"]);
+        $id_grupo = $datos_select[0];
+        $nombre = $datos_select[1];
+    } else {
+        $id_grupo = $_POST["id_grupo"];
+        $nombre = $_POST["nombre"];
+    }
+
     $headers[] = "Authorization: Bearer " . $_SESSION["token"];
-    $url = DIR_SERV . "/obtenerGrupos";
-    $respuesta = consumir_servicios_JWT_REST($url, "GET", $headers);
-    $json_grupos = json_decode($respuesta, true);
-    if (!$json_grupos) {
+    $url = DIR_SERV . "/obtenerHorario/" . $id_grupo;
+    $respuesta = consumir_servicios_REST($url, "GET", $headers);
+    $json_horario = json_decode($respuesta, true);
+    if (!$json_horario) {
         session_destroy();
         die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>Error usando el servicio" . $url . "</p>"));
     }
-    if (isset($json_grupos["error"])) {
+    if (isset($json_horario["error"])) {
         session_destroy();
-        die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>" . $json_grupos["error"] . "</p>"));
+        die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>" . $json_horario["error"] . "</p>"));
     }
 
-    $nombre = "";
-    $id_grupo = "";
-    if((isset($_POST["btnHorario"])) || (isset($_POST["btnEditar"]))){
-        
-        if (isset($_POST["btnHorario"])) {
-            $datos_select = explode("-", $_POST["grupos"]);
-            $id_grupo = $datos_select[0];
-            $nombre = $datos_select[1];
-        } else {
-            $id_grupo = $_POST["id_grupo"];
-            $nombre = $_POST["nombre"];
-        }
-
-        $headers[] = "Authorization: Bearer " . $_SESSION["token"];
-        $url = DIR_SERV . "/obtenerHorario/" . $id_grupo;
-        $respuesta = consumir_servicios_REST($url, "GET", $headers);
-        $json_horario = json_decode($respuesta, true);
-        if (!$json_horario) {
-            session_destroy();
-            die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>Error usando el servicio" . $url . "</p>"));
-        }
-        if (isset($json_horario["error"])) {
-            session_destroy();
-            die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>" . $json_grupos["error"] . "</p>"));
-        }
-
-        foreach($json_horario["horario_grupo"] as $tupla){
-            $nomProfesor[$tupla["dia"]][$tupla["hora"]][]=$tupla["nombre"]."(".$tupla["aula"].")";
+    $nomProfesor=[];
+    if (isset($json_horario["horario_grupo"]) && is_array($json_horario["horario_grupo"])) {
+        foreach ($json_horario["horario_grupo"] as $tupla) {
+            $nomProfesor[$tupla["dia"]][$tupla["hora"]][] = $tupla["profe"] . " (" . $tupla["aula"] . ")";
         }
     }
+}
 
 ?>
 
@@ -115,7 +118,7 @@
     </p>
     <?php
     if (isset($_POST["btnHorario"]) || isset($_POST["btnEditar"])) {
-       
+
 
         echo "<h2 class='centrar'>Horario del Grupo: " . $nombre . "</h2>";
         echo "<table>";
@@ -132,12 +135,12 @@
                 echo "<td>" . HORAS[$hora] . "</td>";
 
 
-                for ($dia= 1; $dia <= 5; $dia++) {
+                for ($dia = 1; $dia <= 5; $dia++) {
                     echo "<td>";
 
-                    if(isset($nomProfesor[$dia][$hora])){
-                        for ($i=0; $i < count($nomProfesor[$dia][$hora]); $i++) { 
-                            echo $nomProfesor[$dia][$hora][$i]."</br>";
+                    if (isset($nomProfesor[$dia][$hora])) {
+                        for ($i = 0; $i < count($nomProfesor[$dia][$hora]); $i++) {
+                            echo $nomProfesor[$dia][$hora][$i] . "</br>";
                         }
                     }
 
@@ -148,7 +151,6 @@
             }
         }
         echo "</table>";
-        var_dump($json_horario["horario_grupo"]);
     }
     ?>
 </body>
