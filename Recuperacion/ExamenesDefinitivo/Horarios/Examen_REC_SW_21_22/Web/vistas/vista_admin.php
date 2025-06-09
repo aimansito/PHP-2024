@@ -38,12 +38,17 @@ if ((isset($_POST["btnHorario"])) || (isset($_POST["btnEditar"]))) {
         die(error_page("Examen Final PHP", "<h1>Examen Final PHP</h1><p>" . $json_horario["error"] . "</p>"));
     }
 
-    $nomProfesor=[];
-    if (isset($json_horario["horario_grupo"]) && is_array($json_horario["horario_grupo"])) {
+    if (isset($json_horario["horario_grupo"])) {
         foreach ($json_horario["horario_grupo"] as $tupla) {
-            $nomProfesor[$tupla["dia"]][$tupla["hora"]][] = $tupla["profe"] . " (" . $tupla["aula"] . ")";
+            $dia = $tupla["dia"];
+            $hora = $tupla["hora"];
+            $profe = $tupla["profe"];
+            $aula = $tupla["aula"];
+    
+            $horarios[$dia][$hora][] = "$profe ($aula)";
         }
     }
+    
 }
 
 ?>
@@ -127,7 +132,7 @@ if ((isset($_POST["btnHorario"])) || (isset($_POST["btnEditar"]))) {
         for ($i = 1; $i < count(DIAS); $i++) {
             echo "<th>" . DIAS[$i] . "</th>";
         }
-        for ($hora = 1; $hora < count(HORAS); $hora++) {
+        for ($hora = 0; $hora < count(HORAS); $hora++) {
             echo "<tr>";
             if ($hora == 4) {
                 echo "<td>" . HORAS[$hora] . "</td><td colspan='5'>RECREO</td>";
@@ -137,13 +142,11 @@ if ((isset($_POST["btnHorario"])) || (isset($_POST["btnEditar"]))) {
 
                 for ($dia = 1; $dia <= 5; $dia++) {
                     echo "<td>";
-
-                    if (isset($nomProfesor[$dia][$hora])) {
-                        for ($i = 0; $i < count($nomProfesor[$dia][$hora]); $i++) {
-                            echo $nomProfesor[$dia][$hora][$i] . "</br>";
+                    if (isset($horarios[$dia][$hora])) {
+                        foreach ($horarios[$dia][$hora] as $linea) {
+                            echo $linea . "<br>";
                         }
                     }
-
                     echo "</td>";
                 }
 

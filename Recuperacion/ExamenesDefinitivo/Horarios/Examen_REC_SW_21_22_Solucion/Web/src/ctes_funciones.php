@@ -20,6 +20,6 @@ function error_page($title,$body)
     return $html;
 }
 
-define("DIR_SERV","http://localhost/PHP-2024/Recuperacion/ExamenesDefinitivo/Horarios/Examen_REC_SW_21_22_Solucion/servicios_rest/");
+define("DIR_SERV","http://localhost/Proyectos/Recuperacion/ExamenesDefinitivo/Horarios/Examen_REC_SW_21_22_Solucion/servicios_rest/");
 define("MINUTOS",10);
 ?>
